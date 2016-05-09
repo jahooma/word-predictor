@@ -15,7 +15,7 @@ type Scorer() =
   default __.score distribution word = 
     if not $ Scorer.isValidDistribution distribution then 0.0 else
     match Map.tryFind word distribution with
-    | None -> printfn "not valid distribution %s" $ distribution.ToString(); 0.0
+    | None -> 0.0
     | Some p -> p
 
   member self.scoreSeq (predictor: Predictor) words =
