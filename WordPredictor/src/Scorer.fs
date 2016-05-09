@@ -5,10 +5,8 @@ type Scorer() =
 
   static member isValidDistribution (distribution: Map<string, float>) =
     let values = Map.values distribution
-    let sum = Seq.sum values
-    let forall = Seq.forall Num.isNonNegative values 
-    (Seq.sum values <= 1.0)
-      && (Seq.forall Num.isNonNegative values)
+    Seq.sum values <= 1.0
+      && Seq.forall Num.isNonNegative values
 
   /// Computes a score when given the predicted word probability distribution
   /// and the correct word.
