@@ -33,10 +33,10 @@ type Scorer() =
 
 type RelaxedScorer(?relaxationConstant: float) =
   inherit Scorer()
+
+  let c = Option.withDefault 2.0 relaxationConstant
   override __.score distribution word = 
     if not $ Scorer.isValidDistribution distribution then 0.0 else
     match Map.tryFind word distribution with
     | None -> 0.0
-    | Some p -> 
-      let c = Option.withDefault 2.0 relaxationConstant
-      1.0 - (1.0 - p) ** c
+    | Some p -> 1.0 - (1.0 - p) ** c

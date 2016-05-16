@@ -59,10 +59,14 @@
     <None Include="App.config" />
     <Compile Include="src\Utils\Common.fs" />
     <Compile Include="src\Utils\Extensions.fs" />
+    <Compile Include="src\Utils\DataStructures.fs" />
     <Compile Include="src\Web\WebScraper.fs" />
     <Compile Include="src\Web\WikipediaParser.fs" />
     <Compile Include="src\Web\WikipediaScraper.fs" />
     <Compile Include="src\Predictor.fs" />
+    <Compile Include="src\PredictorUtils.fs" />
+    <Compile Include="src\NGramPredictor\NGramfs.fs" />
+    <Compile Include="src\NGramPredictor\NGramPredictor.fs" />
     <Compile Include="src\Scorer.fs" />
     <Compile Include="src\Main.fs" />
   </ItemGroup>

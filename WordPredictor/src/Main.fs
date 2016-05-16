@@ -2,21 +2,31 @@
 
 module Main =
 
+  let wordsFile = "./scraped_wikipedia_articles.txt"
+
+  let scrapeWikipedia numArticles =
+    // Download text of random articles
+    let wikipediaScraper = WikipediaScraper()
+    let words = wikipediaScraper.WordsFromRandomArticles(numArticles)
+                |> Async.RunSynchronously 
+    let wikiText = Seq.join " " words
+    printStr wikiText
+    System.IO.File.WriteAllText(wordsFile, wikiText)
+    words
+
+  let loadWordsFromFile() =
+    let words = System.IO.File.ReadAllText(wordsFile)
+    words.Split(' ')
+
   [<EntryPoint>]
   let main argv = 
-    // Download text of 10 random articles
-    let wikipediaScraper = WikipediaScraper()
-    let numArticles = 10
-    let words = Async.RunSynchronously $ wikipediaScraper.WordsFromRandomArticles(numArticles)
-    let wikiText = Seq.join words " "
-    printStr wikiText
-    System.IO.File.WriteAllText("./scraped_wikipedia_articles.txt", wikiText)
-
-    // Run StaticPredictor across words, and score the result
-    let predictor = StaticPredictor()
+    let words = scrapeWikipedia 20
+    //let words = loadWordsFromFile()
+    let predictor = CombinedNGramPredictor(3)
     let scorer = RelaxedScorer()
-    let finalScore = Async.RunSynchronously $ scorer.predictorScore predictor words
-    printfn "\nFinal Score of StaticPredictor: %s" $ finalScore.ToString()
+    let finalScore = scorer.predictorScore predictor words 
+                     |> Async.RunSynchronously 
+    printfn "\nFinal Score: %s" $ finalScore.ToString()
 
     printfn "Press any key to exit."
     System.Console.ReadKey() |> ignore

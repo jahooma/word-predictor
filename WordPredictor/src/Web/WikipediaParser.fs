@@ -60,10 +60,13 @@ module WikipediaParser =
         |> Seq.concat
       Seq.append title content
 
+  let newArticleWord = "<new-article>"
+
   /// Extract the words from the main content of a wikipedia article.
   let htmlToWordSeq (htmlDoc: HtmlDocument) =
     getContentNodes htmlDoc 
     |> Seq.map HtmlNode.innerText
-    |> Seq.fold (fun s1 s2 -> s1 + " " + s2 + " ") "" 
-    |> cleanStr 
+    |> Seq.fold (fun s1 s2 -> s1 + " " + s2 + " ") ""
+    |> cleanStr
+    |> (fun str -> newArticleWord + " " + str)
     |> splitIntoWords
